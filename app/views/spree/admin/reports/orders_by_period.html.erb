@@ -21,15 +21,15 @@
       <div class="row offset-by-two">
         <div class="alpha four columns field-block">
           <div class="field">
-            <%= label_tag :group_by, Spree.t(:group_by) %>
+            <%= label_tag :group_by, Spree.t(:group_by, scope: :opp_reports) %>
             <%= select_tag :group_by,
-                           options_for_select(@report.group_by_list, selected: @report.group_by),
+                           options_for_select(@report.group_by_list.collect{|r| [Spree.t(r, scope: :group_by_list), r]}, selected: @report.group_by),
                            {:include_blank => false, :class => 'select2', style: 'width:100%'}%>
           </div>
         </div>
         <div class="alpha four columns field-block">
           <div class="field">
-            <%= label_tag :months, Spree.t(:months),{title: @report.date_start ? "date_start: #{l(@report.date_start.to_date)}" : "" } %>
+            <%= label_tag :months, Spree.t(:months, scope: :opp_reports),{title: @report.date_start ? "date_start: #{l(@report.date_start.to_date)}" : "" } %>
             <%= select_tag :months,
                            options_for_select(SpreeReports.report_months, selected: @report.months),
                            {:include_blank => false, :class => 'select2', style: 'width:100%'}%>
@@ -73,7 +73,7 @@
       <% end %>
 
         <div class="actions filter-actions">
-          <%= button Spree.t(:reload), 'reload' %>
+          <%= button Spree.t(:reload), 'refresh' %>
         </div>
 
     <% end %>
@@ -87,17 +87,17 @@
     <table class="index data">
       <thead>
       <tr>
-        <th><%= @report.group_by.capitalize %></th>
-        <th>Orders</th>
-        <th class="help"><span class="with-tip" data-powertip="Item Count Total">ICT</span></th>
-        <th class="help"><span class="with-tip" data-powertip="Items per Order">IPO</span></th>
-        <th class="help"><span class="with-tip" data-powertip="Average Total">Avg. T.</span></th>
-        <th class="help"><span class="with-tip" data-powertip="Total">Total</span></th>
-        <th class="help"><span class="with-tip" data-powertip="Item Total">Item T.</span></th>
-        <th class="help"><span class="with-tip" data-powertip="Adjustment Total">Adjustment T.</span></th>
-        <th class="help"><span class="with-tip" data-powertip="Shipment Total">Shipment T.</span></th>
-        <th class="help"><span class="with-tip" data-powertip="Promo Total">Promo T.</span></th>
-        <th class="help"><span class="with-tip" data-powertip="Included Tax Total">Included Tax T.</span></th>
+        <th><%= Spree.t(@report.group_by, scope: :group_by_list) %></th>
+        <th><%= Spree.t(:orders_count) %></th>
+        <th class="help"><span class="with-tip" data-powertip="<%= Spree.t(:item_count_total) %>">ICT</span></th>
+        <th class="help"><span class="with-tip" data-powertip="<%= Spree.t(:items_per_order) %>">IPO</span></th>
+        <th class="help"><span class="with-tip" data-powertip="<%= Spree.t(:average_total) %>">Avg. T.</span></th>
+        <th class="help"><span class="with-tip" data-powertip="<%= Spree.t(:total_sale) %>">Total</span></th>
+        <th class="help"><span class="with-tip" data-powertip="<%= Spree.t(:item_total) %>">Item T.</span></th>
+        <th class="help"><span class="with-tip" data-powertip="<%= Spree.t(:adjustment_total) %>">Adjustment T.</span></th>
+        <th class="help"><span class="with-tip" data-powertip="<%= Spree.t(:shipment_total) %>">Shipment T.</span></th>
+        <th class="help"><span class="with-tip" data-powertip="<%= Spree.t(:shipment_total) %>">Promo T.</span></th>
+        <th class="help"><span class="with-tip" data-powertip="<%= Spree.t(:included_tax_total) %>">Included Tax T.</span></th>
       </tr>
       </thead>
 
@@ -126,44 +126,44 @@
 
   <div class="charts">
      
-     <h2>Order Count</h2>
+     <h2><%= Spree.t(:orders_count) %></h2>
      <div class="chart">
        <%= column_chart Hash[@report.data.collect { |i| [i[:date_formatted], i[:count]] }] %>
      </div>
   
-     <h2>Item Count Total</h2>
+     <h2><%= Spree.t(:item_count_total) %></h2>
      <div class="chart">
        <%= column_chart Hash[@report.data.collect { |i| [i[:date_formatted], i[:item_count_total]] }] %>
      </div>
   
-     <h2>Items per Order</h2>
+     <h2><%= Spree.t(:items_per_order) %></h2>
      <div class="chart">
        <%= column_chart Hash[@report.data.collect { |i| [i[:date_formatted], i[:items_per_order]] }] %>
      </div>
      
-     <h2>Average Total</h2>
+     <h2><%= Spree.t(:average_total) %></h2>
      <div class="chart">
        <%= column_chart Hash[@report.data.collect { |i| [i[:date_formatted], i[:avg_total]] }] %>
      </div>
           
-     <h2>Total & Item Total</h2>
+     <h2><%= Spree.t(:total_sale) %> & <%= Spree.t(:item_total) %></h2>
      <div class="chart">
        <%=
          column_chart [
-           { name: "Total", data: Hash[@report.data.collect { |i| [i[:date_formatted], i[:total]] }] },
-           { name: "Item Total", data: Hash[@report.data.collect { |i| [i[:date_formatted], i[:item_total]] }] }
+           { name: Spree.t(:total_sale), data: Hash[@report.data.collect { |i| [i[:date_formatted], i[:total]] }] },
+           { name: Spree.t(:item_total), data: Hash[@report.data.collect { |i| [i[:date_formatted], i[:item_total]] }] }
          ]
        %>
      </div>
      
-     <h2>Misc Totals</h2>
+     <h2><%= Spree.t(:misc_total) %></h2>
      <div class="chart">
        <%=
          column_chart [
-           { name: "Shipment Total", data: Hash[@report.data.collect { |i| [i[:date_formatted], i[:shipment_total]] }] },
-           { name: "Included Tax Total", data: Hash[@report.data.collect { |i| [i[:date_formatted], i[:included_tax_total]] }] },
-           { name: "Adjustment Total", data: Hash[@report.data.collect { |i| [i[:date_formatted], i[:adjustment_total]] }] },
-           { name: "Promo Total", data: Hash[@report.data.collect { |i| [i[:date_formatted], i[:promo_total]] }] }
+           { name: Spree.t(:shipment_total), data: Hash[@report.data.collect { |i| [i[:date_formatted], i[:shipment_total]] }] },
+           { name: Spree.t(:included_tax_total), data: Hash[@report.data.collect { |i| [i[:date_formatted], i[:included_tax_total]] }] },
+           { name: Spree.t(:adjustment_total), data: Hash[@report.data.collect { |i| [i[:date_formatted], i[:adjustment_total]] }] },
+           { name: Spree.t(:promo_total), data: Hash[@report.data.collect { |i| [i[:date_formatted], i[:promo_total]] }] }
          ]
        %>
      </div>
@@ -174,7 +174,7 @@
     <h2>Permalink</h2>
     <input id="spree_reports_permalink" type="text" value="<%= request.url.split('?').first + "?" + params.except(:utf8, :commit, :action, :controller).to_query %>" onclick="$(this).select();return;">
     <% if SpreeReports.csv_export %>
-      <%= link_to 'Download as CSV', params.except(:utf8, :commit).merge(format: "csv") %>
+      <%= link_to Spree.t(:download_csv), params.except(:utf8, :commit).merge(format: "csv") %>
     <% end %>
   </div>
   
