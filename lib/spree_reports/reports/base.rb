@@ -6,7 +6,7 @@ module SpreeReports
         users = []
 
         if SpreeReports.excluded_roles && SpreeReports.excluded_roles.any?
-          users += Spree::User.joins(:spree_roles).where("spree_roles.name": SpreeReports.excluded_roles).pluck(:id)
+          users += Spree::User.joins(:spree_roles).where("spree_roles.name = ?", SpreeReports.excluded_roles).pluck(:id)
         end
 
         if SpreeReports.excluded_users && SpreeReports.excluded_users.any?

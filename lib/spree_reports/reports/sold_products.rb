@@ -35,7 +35,7 @@ module SpreeReports
         line_items = Spree::LineItem.where(order_id: order_ids)
         variant_ids_and_quantity = line_items.group(:variant_id).sum(:quantity).sort_by { |k,v| v }.reverse
         
-        variants = Spree::Variant.all
+        variants = Spree::Variant.with_deleted
         variant_names = variants.all.map { |v| [v.id, [variant_name_with_option_values(v), v.slug, v.available_on] ] }.to_h
         
         @data_tmp = variant_ids_and_quantity.map do |id, quantity|
