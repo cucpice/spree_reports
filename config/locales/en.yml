@@ -4,7 +4,26 @@ en:
     orders_by_period_description: "Orders for a specific time range per period"
     sold_products: "Sold products"
     sold_products_description: "Quantity of sold products for a specific time range"
-    
+
     spree_reports:
       test: "TEST"
-      
+    orders_per_period: 'Orders per period'
+    opp_reports:
+      months: ''
+      group_by: ''
+    group_by_list:
+      day: ""
+      week: ""
+      month: ""
+      year: ""
+    orders_count: ''
+    item_count_total: ''
+    items_per_order: ''
+    average_total: ''
+    total_sale: ''
+    item_total: ''
+    promo_total: ''
+    shipment_total: ''
+    included_tax_total: ''
+    misc_total: ''
+    download_csv: ''
