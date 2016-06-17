@@ -21,7 +21,6 @@ module SpreeReports
         excluded_order_ids = Spree::Order.where(user_id: excluded_user_ids).pluck(:id)
         orders.where.not(id: excluded_order_ids) if excluded_order_ids.any?  
       end
-        
     end
   end
 end

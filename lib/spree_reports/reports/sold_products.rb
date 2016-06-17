@@ -3,7 +3,7 @@ module SpreeReports
     class SoldProducts < SpreeReports::Reports::Base
       
       attr_accessor :params, :data, :orders
-      attr_accessor :currencies, :currency, :stores, :store, :months, :date_start
+      attr_accessor :currencies, :currency, :stores, :store
       
       def initialize(params)
         @params = params
@@ -19,14 +19,12 @@ module SpreeReports
         @stores = Spree::Store.all.map { |store| [store.name, store.id] }
         @stores << ["all", "all"]
         @store = @stores.map{ |s| s[1].to_s }.include?(params[:store]) ? params[:store] : @stores.first[1]
-    
-        @months = SpreeReports.report_months.include?(params[:months]) ? params[:months] : SpreeReports.default_months.to_s
-        @date_start = (@months != "all") ? (Time.now - (@months.to_i).months) : nil       
+        (@start_date, @end_date) = [params[:completed_at_gt], params[:completed_at_lt]]
       end
       
       def get_data
         @orders = Spree::Order.complete.where(payment_state: 'paid')
-        @orders = @orders.where("completed_at >= ?", @date_start) if @date_start
+        @orders = @orders.where("completed_at >= ? AND completed_at <= ?", @start_date, @end_date)
         @orders = @orders.where(currency: @currency) if @currencies.size > 1
         @orders = @orders.where(store_id: @store) if @stores.size > 2 && @store != "all"
         @orders = without_excluded_orders(@orders)

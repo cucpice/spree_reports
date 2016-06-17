@@ -13,6 +13,7 @@ Spree::Admin::ReportsController.class_eval do
   end
   
   def sold_products
+    (params[:completed_at_gt], params[:completed_at_lt]) = parse_date(params[:completed_at_gt],params[:completed_at_lt])
     @report = SpreeReports::Reports::SoldProducts.new(params)
     respond_to do |format|
       format.html
@@ -29,6 +30,15 @@ Spree::Admin::ReportsController.class_eval do
     SpreeReports.reports.each do |report|
       Spree::Admin::ReportsController.add_available_report! report
     end
+  end
+
+  private
+  def parse_date(start_date, end_date)
+    start_date = Time.zone.parse(start_date) rescue nil
+    start_date ||= Time.zone.now.beginning_of_month
+    end_date = Time.zone.parse(end_date).end_of_day rescue nil
+    end_date ||= Time.zone.now.end_of_day
+    [start_date, end_date]
   end
   
 end

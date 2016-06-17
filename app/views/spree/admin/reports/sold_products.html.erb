@@ -17,17 +17,6 @@
 
 <% content_for :table_filter do %>
     <%= form_tag "", method: :get, class: "options" do %>
-      <div class="row offset-by-two">
-        <div class="alpha twelve columns field-block">
-          <div class="field">
-            <%= label_tag :months, Spree.t(:months, scope: :opp_reports),{title: @report.date_start ? "date_start: #{l(@report.date_start.to_date)}" : "" } %>
-            <%= select_tag :months,
-                           options_for_select(SpreeReports.report_months, selected: @report.months),
-                           {:include_blank => false, :class => 'select2', style: 'width:100%'}%>
-          </div>
-        </div>
-
-      </div>
 
       <div class="row">
         <dif class="alpha sixteen columns field-block">
