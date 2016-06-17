@@ -1,61 +1,112 @@
 <%= stylesheet_link_tag 'spree_reports/spree_reports', media: 'all' %>
 <%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
-<%=  %>
+
+<% content_for :page_title do %>
+    <%= Spree.t(:sold_products) %>
+<% end %>
+
+<% content_for :page_actions do %>
+    <li>
+      <%= link_to_with_icon 'arrow-left', Spree.t(:back_to_reports_list), spree.admin_reports_url, class: 'button' %>
+    </li>
+<% end %>
+
+<% content_for :table_filter_title do %>
+    <%= Spree.t(:date_range) %>
+<% end %>
+
+<% content_for :table_filter do %>
+    <%= form_tag "", method: :get, class: "options" do %>
+      <div class="row offset-by-two">
+        <div class="alpha twelve columns field-block">
+          <div class="field">
+            <%= label_tag :months, Spree.t(:months, scope: :opp_reports),{title: @report.date_start ? "date_start: #{l(@report.date_start.to_date)}" : "" } %>
+            <%= select_tag :months,
+                           options_for_select(SpreeReports.report_months, selected: @report.months),
+                           {:include_blank => false, :class => 'select2', style: 'width:100%'}%>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <dif class="alpha sixteen columns field-block">
+          <div class="date-range-filter field align-center">
+            <div class="field" data-hook="completed_at_search">
+              <%= label_tag nil, Spree.t(:start), class: 'inline' %>
+              <%= text_field_tag :completed_at_gt, datepicker_field_value(params[:completed_at_gt]), class: 'datepicker datepicker-from' %>
+              <span class="range-divider">
+                        <i class="fa fa-arrow-right"></i>
+                      </span>
+              <%= text_field_tag :completed_at_lt, datepicker_field_value(params[:completed_at_lt]), class: 'datepicker datepicker-to' %>
+              <%= label_tag nil, Spree.t(:end), class: 'inline' %>
+            </div>
+          </div>
+        </dif>
+      </div>
+
+      <% if @report.currencies.size > 1 || @report.stores.size > 2 %>
+        <div class="row offset-by-four">
+          <% if @report.currencies.size > 1 %>
+            <div class="alpha four columns field-block">
+              <div class="field">
+                <%= label_tag :currency, Spree.t(:currency) %>
+                <%= select_tag :currency,
+                               options_for_select(@report.currencies, selected: @report.currency),
+                               {:include_blank => false, :class => 'select2', style: 'width:100%'}%>
+              </div>
+            </div>
+          <% end %>
+
+          <% if @report.stores.size > 2 %>
+            <div class="alpha four columns field-block">
+              <div class="field">
+                <%= label_tag :store, Spree.t(:store) %>
+                <%= select_tag :store,
+                               options_for_select(@report.stores, selected: @report.store),
+                               {:include_blank => false, :class => 'select2', style: 'width:100%'}%>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="actions filter-actions">
+        <%= button Spree.t(:reload), 'refresh' %>
+      </div>
+
+    <% end %>
+<% end %>
 
 <div class="spree_reports report">
   
-  <h1>Sold Products</h1>
-  
-  <div class="options">
-    
-    <%= form_tag "", method: :get, class: "options" do %>
-
-      <span class="option">
-        <span title="<%= @report.date_start ? "date_start: #{l(@report.date_start.to_date)}" : "" %>">months:</span>
-        <%= select_tag "months", options_for_select(SpreeReports.report_months, selected: @report.months) %>
-      </span>
-        
-      <% if @report.currencies.size > 1 %>
-        <span class="option">
-          currency:
-          <%= select_tag "currency", options_for_select(@report.currencies, selected: @report.currency) %>
-        </span>
-      <% end %>
-  
-      <% if @report.stores.size > 2 %>
-        <span class="option">
-          store:
-          <%= select_tag "store", options_for_select(@report.stores, selected: @report.store) %>
-        </span>
-      <% end %>
-  
-      <%= submit_tag 'reload' %>
-  
-    <% end %>
-    
-  </div>
+  <h1><%= Spree.t(:sold_products) %></h1>
   
   <div class="table">
     
-    <table class="data" border="1">
-      <tr>
-        <th>Pos</th>
-        <th>Variant ID</th>
-        <th>Product Variant Name</th>
-        <th>Quantity</th>
-      </tr>
-  
-      <% @report.data.each_with_index do |item, index| %>
+    <table class="data">
+      <thead>
         <tr>
-          <td><%= index+1 %></td>
-          <td><%= item[:variant_id] %></td>
-          <td>
-            <%= link_to item[:variant_name], product_path(item[:variant_slug]), class: item[:variant_available_on] > Time.now ? "red" : "" %>
-            <%= link_to "edit", admin_product_path(item[:variant_slug]) %>
-          </td>
-          <td><%= number_with_delimiter(item[:quantity]) %></td>
+          <th>Pos</th>
+          <th>Variant ID</th>
+          <th>Product Variant Name</th>
+          <th>Quantity</th>
         </tr>
-      <% end %>
+      </thead>
+
+      <tbody>
+        <% @report.data.each_with_index do |item, index| %>
+          <tr>
+            <td><%= index+1 %></td>
+            <td><%= item[:variant_id] %></td>
+            <td>
+              <%= link_to item[:variant_name], product_path(item[:variant_slug]), class: item[:variant_available_on] > Time.now ? "red" : "" %>
+              <%= link_to "edit", admin_product_path(item[:variant_slug]) %>
+            </td>
+            <td><%= number_with_delimiter(item[:quantity]) %></td>
+          </tr>
+        <% end %>
+      </tbody>
   
     </table>
   
