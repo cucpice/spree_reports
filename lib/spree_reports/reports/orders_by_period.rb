@@ -119,7 +119,7 @@ module SpreeReports
       
       def to_csv
     
-        CSV.generate(headers: true, col_sep: ";") do |csv|
+        CSV.generate(headers: true, col_sep: ",") do |csv|
           csv << %w{date date_formatted count item_count_total items_per_order avg_total total item_total adjustment_total shipment_total promo_total included_tax_total }
       
           @data.each do |item|
