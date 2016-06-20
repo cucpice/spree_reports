@@ -34,6 +34,16 @@
         </dif>
       </div>
 
+      <div class="row offset-by-four">
+        <dif class="alpha eight columns field-block">
+          <div class="field align-center">
+            <%= label_tag :variant, Spree.t(:variant) %>
+            <%= text_field_tag :variant_ids, params[:variant_ids], class: "variant_autocomplete fullwidth" %>
+            <%= render partial: "spree/admin/variants/autocomplete", formats: :js %>
+          </div>
+        </dif>
+      </div>
+
       <% if @report.currencies.size > 1 || @report.stores.size > 2 %>
         <div class="row offset-by-four">
           <% if @report.currencies.size > 1 %>
@@ -138,3 +148,9 @@
   </div>
   
 </div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.variant_autocomplete').variantAutocompleteMultiple();
+  });
+</script>

@@ -22,6 +22,7 @@ module SpreeReports
         (@start_date, @end_date) = [params[:completed_at_gt], params[:completed_at_lt]]
         @sort_by = params[:q][:s]
         @sort_by ||= 'quantity DESC'
+        @variant_ids = params[:variant_ids]
       end
       
       def get_data
@@ -34,6 +35,10 @@ module SpreeReports
         order_ids = @orders.pluck(:id)
         line_items = Spree::LineItem.where(order_id: order_ids)
         # variant_ids_and_quantity = line_items.group(:variant_id).sum(:quantity).sort_by { |k,v| v }.reverse
+        unless @variant_ids.blank?
+          @variant_ids = @variant_ids.split(',')
+          line_items = line_items.where("variant_id IN (?)", @variant_ids)
+        end
         variant_ids_and_quantity = line_items.group(:variant_id).
             select(:variant_id, "SUM(quantity) as quantity", "SUM(price) as price").order(@sort_by).
             collect{|item| [item.variant_id, item.quantity, item.price]}
