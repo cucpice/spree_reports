@@ -73,7 +73,7 @@ module SpreeReports
         
       def to_csv
     
-        CSV.generate(headers: true, col_sep: ";") do |csv|
+        CSV.generate(headers: true, col_sep: ",") do |csv|
           csv << %w{ variant_id variant_name variant_slug quantity price }
       
           @data.each do |item|
@@ -91,7 +91,7 @@ module SpreeReports
       end
       
       def csv_filename
-        "sold_products_#{@months}-months.csv"
+        "sold_products_#{@start_date.to_s(:number)}-#{@end_date.to_s(:number)}-months.csv"
       end
       
     end
