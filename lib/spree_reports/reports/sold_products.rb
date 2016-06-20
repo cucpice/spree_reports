@@ -20,6 +20,8 @@ module SpreeReports
         @stores << ["all", "all"]
         @store = @stores.map{ |s| s[1].to_s }.include?(params[:store]) ? params[:store] : @stores.first[1]
         (@start_date, @end_date) = [params[:completed_at_gt], params[:completed_at_lt]]
+        @sort_by = params[:q][:s]
+        @sort_by ||= 'quantity DESC'
       end
       
       def get_data
@@ -33,7 +35,7 @@ module SpreeReports
         line_items = Spree::LineItem.where(order_id: order_ids)
         # variant_ids_and_quantity = line_items.group(:variant_id).sum(:quantity).sort_by { |k,v| v }.reverse
         variant_ids_and_quantity = line_items.group(:variant_id).
-            select(:variant_id, "SUM(quantity) as quantity", "SUM(price) as price").order('quantity DESC').
+            select(:variant_id, "SUM(quantity) as quantity", "SUM(price) as price").order(@sort_by).
             collect{|item| [item.variant_id, item.quantity, item.price]}
 
         variants = Spree::Variant.with_deleted

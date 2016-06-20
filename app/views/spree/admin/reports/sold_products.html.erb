@@ -79,8 +79,9 @@
           <th>Pos</th>
           <th>Variant ID</th>
           <th>Product Variant Name</th>
-          <th>Quantity</th>
-          <th>Value</th>
+          <!--<th><%= link_to 'Quantity', sold_products_admin_reports_path(params.merge({sort_by: {quantitiy: :asc}})) %></th>-->
+          <th><%= sort_link @search, :quantity %></th>
+          <th><%= sort_link @search, :price, 'Value' %></th>
         </tr>
       </thead>
 
@@ -105,10 +106,15 @@
   
   <div class="charts">
      
-     <h2>Top 20 Products</h2>
+     <h2>Top 20 Products (by quantity)</h2>
      <div class="chart">
        <%= column_chart Hash[@report.data.first(20).collect { |i| [i[:variant_name], i[:quantity]] }] %>
      </div>
+
+    <h2>Top 20 Products (by value)</h2>
+    <div class="chart">
+      <%= column_chart Hash[@report.data.first(20).collect { |i| [i[:variant_name], i[:price]] }] %>
+    </div>
      
      <h2>Flop 20 Products</h2>
      <div class="chart">

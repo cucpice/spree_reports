@@ -14,7 +14,10 @@ Spree::Admin::ReportsController.class_eval do
   
   def sold_products
     (params[:completed_at_gt], params[:completed_at_lt]) = parse_date(params[:completed_at_gt],params[:completed_at_lt])
+    params[:q] ||= {}
+    params[:q][:s] ||= 'quantity desc'
     @report = SpreeReports::Reports::SoldProducts.new(params)
+    @search = Spree::Variant.ransack(params[:q])
     respond_to do |format|
       format.html
       format.csv {
