@@ -82,6 +82,7 @@
           <!--<th><%= link_to 'Quantity', sold_products_admin_reports_path(params.merge({sort_by: {quantitiy: :asc}})) %></th>-->
           <th><%= sort_link @search, :quantity %></th>
           <th><%= sort_link @search, :price, 'Value' %></th>
+          <th data-hook="admin_sold_product_report_header_actions" class="actions"></th>
         </tr>
       </thead>
 
@@ -92,10 +93,15 @@
             <td><%= item[:variant_id] %></td>
             <td>
               <%= link_to item[:variant_name], product_path(item[:variant_slug]), class: item[:variant_available_on] > Time.now ? "red" : "" %>
-              <%= link_to "edit", admin_product_path(item[:variant_slug]) %>
+
             </td>
             <td><%= number_with_delimiter(item[:quantity]) %></td>
             <td><%= Spree::Money.new(item[:price], :currency => @report.currency).to_s %></td>
+            <td class="actions" data-hook="admin_sold_product_report_row_actions">
+              <%# link_to "edit", admin_product_path(item[:variant_slug]) %>
+              <%= link_to_with_icon 'eye', Spree.t(:view), product_path(item[:variant_slug]), no_text: true, class: 'edit', target: '_blank' %>
+              <%= link_to_edit_url admin_product_path(item[:variant_slug]), :no_text => true, :class => 'edit' if can?(:edit, Spree::Variant)%>
+            </td>
           </tr>
         <% end %>
       </tbody>
