@@ -31,18 +31,22 @@ module SpreeReports
         
         order_ids = @orders.pluck(:id)
         line_items = Spree::LineItem.where(order_id: order_ids)
-        variant_ids_and_quantity = line_items.group(:variant_id).sum(:quantity).sort_by { |k,v| v }.reverse
-        
+        # variant_ids_and_quantity = line_items.group(:variant_id).sum(:quantity).sort_by { |k,v| v }.reverse
+        variant_ids_and_quantity = line_items.group(:variant_id).
+            select(:variant_id, "SUM(quantity) as quantity", "SUM(price) as price").order('quantity DESC').
+            collect{|item| [item.variant_id, item.quantity, item.price]}
+
         variants = Spree::Variant.with_deleted
         variant_names = variants.all.map { |v| [v.id, [variant_name_with_option_values(v), v.slug, v.available_on] ] }.to_h
         
-        @data_tmp = variant_ids_and_quantity.map do |id, quantity|
+        @data_tmp = variant_ids_and_quantity.map do |id, quantity, price|
           [
             id,
             quantity,
             variant_names[id][0],
             variant_names[id][1],
-            variant_names[id][2]
+            variant_names[id][2],
+            price
           ]
         end
       end
@@ -54,7 +58,8 @@ module SpreeReports
             variant_name: item[2],
             variant_slug: item[3],
             variant_available_on: item[4],
-            quantity: item[1]
+            quantity: item[1],
+            price: item[5]
           }
         end
       end
@@ -69,14 +74,15 @@ module SpreeReports
       def to_csv
     
         CSV.generate(headers: true, col_sep: ";") do |csv|
-          csv << %w{ variant_id variant_name variant_slug quantity }
+          csv << %w{ variant_id variant_name variant_slug quantity price }
       
           @data.each do |item|
             csv << [
               item[:variant_id],
               item[:variant_name],
               item[:variant_slug],
-              item[:quantity]
+              item[:quantity],
+              item[:price]
             ]
           end
       

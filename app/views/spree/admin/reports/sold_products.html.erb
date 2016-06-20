@@ -80,6 +80,7 @@
           <th>Variant ID</th>
           <th>Product Variant Name</th>
           <th>Quantity</th>
+          <th>Value</th>
         </tr>
       </thead>
 
@@ -93,6 +94,7 @@
               <%= link_to "edit", admin_product_path(item[:variant_slug]) %>
             </td>
             <td><%= number_with_delimiter(item[:quantity]) %></td>
+            <td><%= Spree::Money.new(item[:price], :currency => @report.currency).to_s %></td>
           </tr>
         <% end %>
       </tbody>
