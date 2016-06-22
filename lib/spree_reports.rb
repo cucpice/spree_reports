@@ -34,6 +34,9 @@ module SpreeReports
   
   # these user accounts are exluded from all reports
   mattr_accessor :excluded_users
+
+  # This is for set up the currency format in the report
+  mattr_accessor :money_format
    
 end
 
@@ -58,3 +61,5 @@ SpreeReports.date_formats = {
 }
 SpreeReports.excluded_roles = %w{admin}
 SpreeReports.excluded_users = []
+
+SpreeReports.money_format = {}

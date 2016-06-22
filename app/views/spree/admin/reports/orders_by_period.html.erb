@@ -104,17 +104,18 @@
       <tbody>
       <% @report.data.each do |item| %>
           <tr>
+            <% money_option = SpreeReports.money_format.merge({:currency => @report.currency}) %>
             <td><%= item[:date_formatted] %></td>
             <td><%= number_with_delimiter(item[:count]) %></td>
             <td><%= number_with_delimiter(item[:item_count_total]) %></td>
             <td><%= number_with_precision(item[:items_per_order], precision: 2) %></td>
-            <td><%= Spree::Money.new(item[:avg_total], :currency => @report.currency).to_s %></td>
-            <td><%= Spree::Money.new(item[:total], :currency => @report.currency).to_s %></td>
-            <td><%= Spree::Money.new(item[:item_total], :currency => @report.currency).to_s %></td>
-            <td><%= Spree::Money.new(item[:adjustment_total], :currency => @report.currency).to_s %></td>
-            <td><%= Spree::Money.new(item[:shipment_total], :currency => @report.currency).to_s %></td>
-            <td><%= Spree::Money.new(item[:promo_total], :currency => @report.currency).to_s %></td>
-            <td><%= Spree::Money.new(item[:included_tax_total], :currency => @report.currency).to_s %></td>
+            <td><%= Spree::Money.new(item[:avg_total], money_option).to_s %></td>
+            <td><%= Spree::Money.new(item[:total], money_option).to_s %></td>
+            <td><%= Spree::Money.new(item[:item_total], money_option).to_s %></td>
+            <td><%= Spree::Money.new(item[:adjustment_total], money_option).to_s %></td>
+            <td><%= Spree::Money.new(item[:shipment_total], money_option).to_s %></td>
+            <td><%= Spree::Money.new(item[:promo_total], money_option).to_s %></td>
+            <td><%= Spree::Money.new(item[:included_tax_total], money_option).to_s %></td>
           </tr>
       <% end %>
       </tbody>

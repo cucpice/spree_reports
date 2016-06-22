@@ -106,7 +106,7 @@
 
             </td>
             <td><%= number_with_delimiter(item[:quantity]) %></td>
-            <td><%= Spree::Money.new(item[:price], :currency => @report.currency).to_s %></td>
+            <td><%= Spree::Money.new(item[:price], SpreeReports.money_format.merge({:currency => @report.currency}) ) %></td>
             <td class="actions" data-hook="admin_sold_product_report_row_actions">
               <%# link_to "edit", admin_product_path(item[:variant_slug]) %>
               <%= link_to_with_icon 'eye', Spree.t(:view), product_path(item[:variant_slug]), no_text: true, class: 'edit', target: '_blank' %>
