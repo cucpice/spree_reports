@@ -36,17 +36,11 @@
 
       <div class="row offset-by-four">
         <dif class="alpha eight columns field-block">
-          <div class="field align-center">
+          <div class="field" data-hook="variant_select">
             <%= label_tag :variant, Spree.t(:variant) %>
-            <%= text_field_tag :variant_ids, params[:variant_ids], class: "variant_autocomplete fullwidth" %>
-            <%= render partial: "spree/admin/variants/autocomplete_no_image", formats: :js %>
-            <script>
-              var variants = [
-                  <% @variants.each do |variant| %>
-                  {id: '<%= variant.id %>', name: '<%= variant.name %>', sku: '<%= variant.sku %>', text: '<%= variant.backend_name %>'},
-                  <% end %>
-              ]
-            </script>
+            <%= select_tag :variant_ids,
+                           options_from_collection_for_select(@variants, :id, :backend_name, params[:variant_ids]),
+                           multiple: true, id: 'variant_select', class: 'text-left'%>
           </div>
         </dif>
       </div>
@@ -158,6 +152,9 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    $('.variant_autocomplete').variantAutocompleteMultiple();
+    $('#variant_select').searchableOptionList({
+      maxHeight: '300px',
+      showSelectAll: true,
+    });
   });
 </script>
