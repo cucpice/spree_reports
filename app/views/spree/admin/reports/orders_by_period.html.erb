@@ -18,8 +18,24 @@
 <% content_for :table_filter do %>
     <%= form_tag "", method: :get, class: "options" do %>
 
+      <div class="row">
+        <dif class="alpha sixteen columns field-block">
+          <div class="date-range-filter field align-center">
+            <div class="field" data-hook="completed_at_search">
+              <%= label_tag nil, Spree.t(:start), class: 'inline' %>
+              <%= text_field_tag :completed_at_gt, datepicker_field_value(params[:completed_at_gt]), class: 'datepicker datepicker-from' %>
+              <span class="range-divider">
+                      <i class="fa fa-arrow-right"></i>
+                    </span>
+              <%= text_field_tag :completed_at_lt, datepicker_field_value(params[:completed_at_lt]), class: 'datepicker datepicker-to' %>
+              <%= label_tag nil, Spree.t(:end), class: 'inline' %>
+            </div>
+          </div>
+        </dif>
+      </div>
+
       <div class="row offset-by-two">
-        <div class="alpha four columns field-block">
+        <div class="alpha six columns field-block">
           <div class="field">
             <%= label_tag :group_by, Spree.t(:group_by, scope: :opp_reports) %>
             <%= select_tag :group_by,
@@ -27,15 +43,7 @@
                            {:include_blank => false, :class => 'select2', style: 'width:100%'}%>
           </div>
         </div>
-        <div class="alpha four columns field-block">
-          <div class="field">
-            <%= label_tag :months, Spree.t(:months, scope: :opp_reports),{title: @report.date_start ? "date_start: #{l(@report.date_start.to_date)}" : "" } %>
-            <%= select_tag :months,
-                           options_for_select(SpreeReports.report_months, selected: @report.months),
-                           {:include_blank => false, :class => 'select2', style: 'width:100%'}%>
-          </div>
-        </div>
-        <div class="alpha four columns field-block">
+        <div class="alpha six columns field-block">
           <div class="field">
             <%= label_tag :state, Spree.t(:state)%>
             <%= select_tag :state,

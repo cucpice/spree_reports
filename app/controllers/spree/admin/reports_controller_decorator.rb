@@ -2,6 +2,7 @@ Spree::Admin::ReportsController.class_eval do
   before_filter :spree_reports_setup, only: [:index]
 
   def orders_by_period
+    (params[:completed_at_gt], params[:completed_at_lt]) = parse_date(params[:completed_at_gt],params[:completed_at_lt])
     @report = SpreeReports::Reports::OrdersByPeriod.new(params)
     respond_to do |format|
       format.html

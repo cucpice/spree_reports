@@ -30,21 +30,8 @@ module SpreeReports
         
         # ******************************************************************************************************
         # MONTHS
-    
-        @months = SpreeReports.report_months.include?(params[:months]) ? params[:months] : SpreeReports.default_months.to_s
-        @date_start = (@months != "all") ? (Time.now - (@months.to_i).months) : nil
-    
-        if @date_start
-          if @group_by == :year
-            @date_start = @date_start.beginning_of_year
-          elsif @group_by == :month
-            @date_start = @date_start.beginning_of_month
-          elsif @group_by == :week
-            @date_start = @date_start.beginning_of_week
-          else
-            @date_start = @date_start.beginning_of_day
-          end
-        end
+
+        (@start_date, @end_date) = [params[:completed_at_gt], params[:completed_at_lt]]
                 
       end
       
@@ -69,7 +56,7 @@ module SpreeReports
           @sales = Spree::Order.where(state: @state)
         end
     
-        @sales = @sales.where("#{date_column.to_s} >= ?", @date_start) if @date_start
+        @sales = @sales.where("#{date_column.to_s} >= ? AND #{date_column.to_s} <= ?", @start_date, @end_date)
         @sales = @sales.where(currency: @currency) if @currencies.size > 1
         @sales = @sales.where(store_id: @store) if @stores.size > 2 && @store != "all"        
         @sales = without_excluded_orders(@sales)
