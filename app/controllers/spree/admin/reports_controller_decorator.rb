@@ -18,6 +18,7 @@ Spree::Admin::ReportsController.class_eval do
     params[:q][:s] ||= 'quantity desc'
     @report = SpreeReports::Reports::SoldProducts.new(params)
     @search = Spree::Variant.ransack(params[:q])
+    @variants = Spree::Variant.with_deleted.joins(:product).order("#{Spree::Product.quoted_table_name}.name", :sku)
     respond_to do |format|
       format.html
       format.csv {

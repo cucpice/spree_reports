@@ -39,7 +39,14 @@
           <div class="field align-center">
             <%= label_tag :variant, Spree.t(:variant) %>
             <%= text_field_tag :variant_ids, params[:variant_ids], class: "variant_autocomplete fullwidth" %>
-            <%= render partial: "spree/admin/variants/autocomplete", formats: :js %>
+            <%= render partial: "spree/admin/variants/autocomplete_no_image", formats: :js %>
+            <script>
+              var variants = [
+                  <% @variants.each do |variant| %>
+                  {id: '<%= variant.id %>', name: '<%= variant.name %>', sku: '<%= variant.sku %>', text: '<%= variant.backend_name %>'},
+                  <% end %>
+              ]
+            </script>
           </div>
         </dif>
       </div>
