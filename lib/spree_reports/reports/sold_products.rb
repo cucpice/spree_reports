@@ -36,7 +36,9 @@ module SpreeReports
         line_items = Spree::LineItem.where(order_id: order_ids)
         # variant_ids_and_quantity = line_items.group(:variant_id).sum(:quantity).sort_by { |k,v| v }.reverse
         unless @variant_ids.blank?
-          @variant_ids = @variant_ids.split(',')
+          if @variant_ids.is_a? String
+            @variant_ids = @variant_ids.split(',')
+          end
           line_items = line_items.where("variant_id IN (?)", @variant_ids)
         end
         variant_ids_and_quantity = line_items.group(:variant_id).
