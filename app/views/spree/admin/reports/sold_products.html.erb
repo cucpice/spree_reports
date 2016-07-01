@@ -87,12 +87,11 @@
     <table class="data">
       <thead>
         <tr>
-          <th>Pos</th>
-          <th>Variant ID</th>
-          <th>Product Variant Name</th>
-          <!--<th><%= link_to 'Quantity', sold_products_admin_reports_path(params.merge({sort_by: {quantitiy: :asc}})) %></th>-->
-          <th><%= sort_link @search, :quantity %></th>
-          <th><%= sort_link @search, :price, 'Value' %></th>
+          <th><%= Spree.t(:pos, scope: :sold_products_reports) %></th>
+          <th><%= Spree.t(:variant_id, scope: :sold_products_reports) %></th>
+          <th><%= Spree.t(:product_name_or_sku, scope: :sold_products_reports) %></th>
+          <th><%= sort_link @search, :quantity, Spree.t(:quantity, scope: :sold_products_reports)%></th>
+          <th><%= sort_link @search, :price, Spree.t(:value, scope: :sold_products_reports) %></th>
           <th data-hook="admin_sold_product_report_header_actions" class="actions"></th>
         </tr>
       </thead>

@@ -27,3 +27,9 @@ en:
     included_tax_total: ''
     misc_total: ''
     download_csv: ''
+    sold_products_reports:
+      pos: ''
+      variant_id: ''
+      product_name_or_sku: ''
+      quantity: ''
+      value: ''
