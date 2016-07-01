@@ -9,27 +9,27 @@ en:
       test: "TEST"
     orders_per_period: 'Orders per period'
     opp_reports:
-      months: ''
-      group_by: ''
+      months: 'Months'
+      group_by: 'Group by'
     group_by_list:
-      day: ""
-      week: ""
-      month: ""
-      year: ""
-    orders_count: ''
-    item_count_total: ''
-    items_per_order: ''
-    average_total: ''
-    total_sale: ''
-    item_total: ''
-    promo_total: ''
-    shipment_total: ''
-    included_tax_total: ''
-    misc_total: ''
-    download_csv: ''
+      day: "Day"
+      week: "Week"
+      month: "Month"
+      year: "Year"
+    orders_count: 'Orders count'
+    item_count_total: 'Item count total'
+    items_per_order: 'Item per Order'
+    average_total: 'Average Total'
+    total_sale: 'Total Sale'
+    item_total: 'Item Total'
+    promo_total: 'Promo Total'
+    shipment_total: 'Shipment Total'
+    included_tax_total: 'Include Tax Total'
+    misc_total: 'Misc Total'
+    download_csv: 'Download CSV'
     sold_products_reports:
-      pos: ''
-      variant_id: ''
-      product_name_or_sku: ''
-      quantity: ''
-      value: ''
+      pos: 'POS'
+      variant_id: 'Variant ID'
+      product_name_or_sku: 'Product Name/SKU'
+      quantity: 'Quantity'
+      value: 'Value'
