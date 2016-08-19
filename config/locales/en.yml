@@ -33,3 +33,6 @@ en:
       product_name_or_sku: 'Product Name/SKU'
       quantity: 'Quantity'
       value: 'Value'
+    order_state:
+      complete_paid: 'Completed & Paid'
+      incomplete: 'Incomplete'

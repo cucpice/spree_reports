@@ -47,7 +47,7 @@
           <div class="field">
             <%= label_tag :state, Spree.t(:state)%>
             <%= select_tag :state,
-                           options_for_select(@report.states, selected: @report.state),
+                           options_for_select(@report.states.map{|state| [t(state, scope: 'spree.order_state'), state]}, selected: @report.state),
                            {:include_blank => false, :class => 'select2', style: 'width:100%'}%>
           </div>
         </div>
