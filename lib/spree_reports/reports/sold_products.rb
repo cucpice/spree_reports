@@ -81,8 +81,8 @@ module SpreeReports
       end
         
       def to_csv
-    
-        CSV.generate(headers: true, col_sep: ",") do |csv|
+        head = 'EF BB BF'.split(' ').map{|a|a.hex.chr}.join()
+        CSV.generate(csv = head, headers: true, col_sep: ",") do |csv|
           csv << %w{ variant_id variant_name variant_slug quantity price }
       
           @data.each do |item|
