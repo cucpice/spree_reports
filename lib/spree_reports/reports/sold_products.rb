@@ -42,7 +42,7 @@ module SpreeReports
           line_items = line_items.where("variant_id IN (?)", @variant_ids)
         end
         variant_ids_and_quantity = line_items.group(:variant_id).
-            select(:variant_id, "SUM(quantity) as quantity", "SUM(price) as price").order(@sort_by).
+            select(:variant_id, "SUM(quantity) as quantity", "SUM(price * quantity) as price").order(@sort_by).
             collect{|item| [item.variant_id, item.quantity, item.price]}
 
         variants = Spree::Variant.with_deleted
